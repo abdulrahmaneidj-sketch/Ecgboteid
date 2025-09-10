@@ -1,0 +1,642 @@
+[
+  {
+    "id": 1,
+    "title": "Case 1: Example ECG finding",
+    "short_description": "Brief note for case 1. Replace with real clinical description.",
+    "image": "ecg_cases/case_01.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 1?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 2,
+    "title": "Case 2: Example ECG finding",
+    "short_description": "Brief note for case 2. Replace with real clinical description.",
+    "image": "ecg_cases/case_02.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 2?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 3,
+    "title": "Case 3: Example ECG finding",
+    "short_description": "Brief note for case 3. Replace with real clinical description.",
+    "image": "ecg_cases/case_03.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 3?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 4,
+    "title": "Case 4: Example ECG finding",
+    "short_description": "Brief note for case 4. Replace with real clinical description.",
+    "image": "ecg_cases/case_04.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 4?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 5,
+    "title": "Case 5: Example ECG finding",
+    "short_description": "Brief note for case 5. Replace with real clinical description.",
+    "image": "ecg_cases/case_05.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 5?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 6,
+    "title": "Case 6: Example ECG finding",
+    "short_description": "Brief note for case 6. Replace with real clinical description.",
+    "image": "ecg_cases/case_06.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 6?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 7,
+    "title": "Case 7: Example ECG finding",
+    "short_description": "Brief note for case 7. Replace with real clinical description.",
+    "image": "ecg_cases/case_07.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 7?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 8,
+    "title": "Case 8: Example ECG finding",
+    "short_description": "Brief note for case 8. Replace with real clinical description.",
+    "image": "ecg_cases/case_08.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 8?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 9,
+    "title": "Case 9: Example ECG finding",
+    "short_description": "Brief note for case 9. Replace with real clinical description.",
+    "image": "ecg_cases/case_09.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 9?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 10,
+    "title": "Case 10: Example ECG finding",
+    "short_description": "Brief note for case 10. Replace with real clinical description.",
+    "image": "ecg_cases/case_10.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 10?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 11,
+    "title": "Case 11: Example ECG finding",
+    "short_description": "Brief note for case 11. Replace with real clinical description.",
+    "image": "ecg_cases/case_11.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 11?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 12,
+    "title": "Case 12: Example ECG finding",
+    "short_description": "Brief note for case 12. Replace with real clinical description.",
+    "image": "ecg_cases/case_12.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 12?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 13,
+    "title": "Case 13: Example ECG finding",
+    "short_description": "Brief note for case 13. Replace with real clinical description.",
+    "image": "ecg_cases/case_13.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 13?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 14,
+    "title": "Case 14: Example ECG finding",
+    "short_description": "Brief note for case 14. Replace with real clinical description.",
+    "image": "ecg_cases/case_14.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 14?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 15,
+    "title": "Case 15: Example ECG finding",
+    "short_description": "Brief note for case 15. Replace with real clinical description.",
+    "image": "ecg_cases/case_15.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 15?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 16,
+    "title": "Case 16: Example ECG finding",
+    "short_description": "Brief note for case 16. Replace with real clinical description.",
+    "image": "ecg_cases/case_16.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 16?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 17,
+    "title": "Case 17: Example ECG finding",
+    "short_description": "Brief note for case 17. Replace with real clinical description.",
+    "image": "ecg_cases/case_17.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 17?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 18,
+    "title": "Case 18: Example ECG finding",
+    "short_description": "Brief note for case 18. Replace with real clinical description.",
+    "image": "ecg_cases/case_18.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 18?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 19,
+    "title": "Case 19: Example ECG finding",
+    "short_description": "Brief note for case 19. Replace with real clinical description.",
+    "image": "ecg_cases/case_19.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 19?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 20,
+    "title": "Case 20: Example ECG finding",
+    "short_description": "Brief note for case 20. Replace with real clinical description.",
+    "image": "ecg_cases/case_20.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 20?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 21,
+    "title": "Case 21: Example ECG finding",
+    "short_description": "Brief note for case 21. Replace with real clinical description.",
+    "image": "ecg_cases/case_21.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 21?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 22,
+    "title": "Case 22: Example ECG finding",
+    "short_description": "Brief note for case 22. Replace with real clinical description.",
+    "image": "ecg_cases/case_22.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 22?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 23,
+    "title": "Case 23: Example ECG finding",
+    "short_description": "Brief note for case 23. Replace with real clinical description.",
+    "image": "ecg_cases/case_23.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 23?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 24,
+    "title": "Case 24: Example ECG finding",
+    "short_description": "Brief note for case 24. Replace with real clinical description.",
+    "image": "ecg_cases/case_24.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 24?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 25,
+    "title": "Case 25: Example ECG finding",
+    "short_description": "Brief note for case 25. Replace with real clinical description.",
+    "image": "ecg_cases/case_25.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 25?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 26,
+    "title": "Case 26: Example ECG finding",
+    "short_description": "Brief note for case 26. Replace with real clinical description.",
+    "image": "ecg_cases/case_26.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 26?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 27,
+    "title": "Case 27: Example ECG finding",
+    "short_description": "Brief note for case 27. Replace with real clinical description.",
+    "image": "ecg_cases/case_27.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 27?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 28,
+    "title": "Case 28: Example ECG finding",
+    "short_description": "Brief note for case 28. Replace with real clinical description.",
+    "image": "ecg_cases/case_28.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 28?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 29,
+    "title": "Case 29: Example ECG finding",
+    "short_description": "Brief note for case 29. Replace with real clinical description.",
+    "image": "ecg_cases/case_29.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 29?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 30,
+    "title": "Case 30: Example ECG finding",
+    "short_description": "Brief note for case 30. Replace with real clinical description.",
+    "image": "ecg_cases/case_30.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 30?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 31,
+    "title": "Case 31: Example ECG finding",
+    "short_description": "Brief note for case 31. Replace with real clinical description.",
+    "image": "ecg_cases/case_31.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 31?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 32,
+    "title": "Case 32: Example ECG finding",
+    "short_description": "Brief note for case 32. Replace with real clinical description.",
+    "image": "ecg_cases/case_32.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 32?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 33,
+    "title": "Case 33: Example ECG finding",
+    "short_description": "Brief note for case 33. Replace with real clinical description.",
+    "image": "ecg_cases/case_33.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 33?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 34,
+    "title": "Case 34: Example ECG finding",
+    "short_description": "Brief note for case 34. Replace with real clinical description.",
+    "image": "ecg_cases/case_34.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 34?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 35,
+    "title": "Case 35: Example ECG finding",
+    "short_description": "Brief note for case 35. Replace with real clinical description.",
+    "image": "ecg_cases/case_35.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 35?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 36,
+    "title": "Case 36: Example ECG finding",
+    "short_description": "Brief note for case 36. Replace with real clinical description.",
+    "image": "ecg_cases/case_36.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 36?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  },
+  {
+    "id": 37,
+    "title": "Case 37: Example ECG finding",
+    "short_description": "Brief note for case 37. Replace with real clinical description.",
+    "image": "ecg_cases/case_37.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 37?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 1
+    }
+  },
+  {
+    "id": 38,
+    "title": "Case 38: Example ECG finding",
+    "short_description": "Brief note for case 38. Replace with real clinical description.",
+    "image": "ecg_cases/case_38.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 38?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 2
+    }
+  },
+  {
+    "id": 39,
+    "title": "Case 39: Example ECG finding",
+    "short_description": "Brief note for case 39. Replace with real clinical description.",
+    "image": "ecg_cases/case_39.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 39?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 3
+    }
+  },
+  {
+    "id": 40,
+    "title": "Case 40: Example ECG finding",
+    "short_description": "Brief note for case 40. Replace with real clinical description.",
+    "image": "ecg_cases/case_40.png",
+    "quiz": {
+      "question": "What is the most likely finding in Case 40?",
+      "options": [
+        "Normal sinus rhythm",
+        "Atrial fibrillation",
+        "ST elevation (MI)",
+        "Complete heart block"
+      ],
+      "answer_index": 0
+    }
+  }
+]
