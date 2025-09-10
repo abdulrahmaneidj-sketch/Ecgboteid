@@ -1,196 +1,246 @@
+# main.py
+import os
+import json
+import logging
+import random
+from pathlib import Path
 
-import os, json, logging, random
-from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext, MessageHandler, Filters
+from aiogram import Bot, Dispatcher, types
+from aiogram.utils import executor
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 if not BOT_TOKEN:
-    logger.error("BOT_TOKEN environment variable not set. Exiting.")
+    logger.error("BOT_TOKEN not found in environment. Set BOT_TOKEN variable.")
     raise SystemExit("BOT_TOKEN not set")
 
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher(bot)
+
+BASE_DIR = Path(__file__).parent
+
 # load cases
-BASE_DIR = os.path.dirname(__file__)
-with open(os.path.join(BASE_DIR, "cases.json"), "r", encoding="utf-8") as f:
+cases_path = BASE_DIR / "cases.json"
+if not cases_path.exists():
+    logger.error("cases.json not found. Make sure it's next to main.py")
+    raise SystemExit("cases.json missing")
+
+with open(cases_path, "r", encoding="utf-8") as f:
     CASES = json.load(f)
 
-def start(update: Update, context: CallbackContext):
+# Helper: create main menu keyboard
+def main_menu_kb():
+    kb = InlineKeyboardMarkup(row_width=1)
+    kb.add(
+        InlineKeyboardButton("📚 قسم التعليم", callback_data="menu_teach"),
+        InlineKeyboardButton("🩺 حالات ECG", callback_data="menu_cases"),
+        InlineKeyboardButton("📝 اختبارات", callback_data="menu_quiz"),
+    )
+    return kb
+
+@dp.message_handler(commands=["start", "help"])
+async def cmd_start(message: types.Message):
     text = "أهلًا بك في *ECG with Abu Eid* 👋\nاختر من القائمة أدناه:"
-    keyboard = [
-        [InlineKeyboardButton("📚 قسم التعليم", callback_data="menu_teach")],
-        [InlineKeyboardButton("🩺 حالات ECG", callback_data="menu_cases")],
-        [InlineKeyboardButton("📝 اختبارات", callback_data="menu_quiz")],
-    ]
-    update.message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    await message.answer(text, reply_markup=main_menu_kb(), parse_mode="Markdown")
 
-def menu_callback(update: Update, context: CallbackContext):
-    query = update.callback_query
-    data = query.data
-    query.answer()
+# route callback queries
+@dp.callback_query_handler(lambda c: True)
+async def callbacks_router(callback_query: types.CallbackQuery):
+    data = callback_query.data or ""
+    # main menu items
     if data == "menu_teach":
-        send_teach_intro(query)
+        await send_teach_intro(callback_query)
     elif data == "menu_cases":
-        send_cases_list(query, page=0)
+        await send_cases_list(callback_query, page=0)
+    elif data.startswith("cases_page_"):
+        page = int(data.split("_")[-1])
+        await send_cases_list(callback_query, page=page)
+    elif data.startswith("case_") and data.count("_") == 1:
+        case_id = int(data.split("_")[-1])
+        await send_case_detail(callback_query, case_id)
     elif data == "menu_quiz":
-        send_quiz_menu(query)
+        await send_quiz_menu(callback_query)
+    elif data == "quiz_random":
+        case = random.choice(CASES)
+        await send_quiz_for_case(callback_query, case["id"])
+    elif data == "quiz_by_number":
+        # ask user to send a number
+        await bot.send_message(callback_query.from_user.id, "ارسِل رقم الحالة اللي تبغى تختبرها (مثال: 5)")
+        try:
+            await callback_query.message.delete()
+        except:
+            pass
+    elif data.startswith("quiz_case_"):
+        case_id = int(data.split("_")[-1])
+        await send_quiz_for_case(callback_query, case_id)
+    elif data.startswith("answer_"):
+        # format answer_{caseid}_{index}
+        parts = data.split("_")
+        if len(parts) == 3:
+            case_id = int(parts[1]); idx = int(parts[2])
+            await handle_answer(callback_query, case_id, idx)
+    elif data == "back_main":
+        await back_main(callback_query)
+    else:
+        await callback_query.answer()  # generic ack
 
-def send_teach_intro(query):
-    text = ("قسم التعلم:\n\n"
+async def send_teach_intro(query):
+    text = ("*قسم التعلم*\n\n"
             "مقدمة عن ECG وأساسية القراءة:\n"
             "1. موجة P: atrial depolarization.\n"
             "2. QRS: ventricular depolarization.\n"
             "3. T: ventricular repolarization.\n\n"
             "تقدر ترجع للقائمة بالأسفل.")
-    keyboard = [[InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="back_main")]]
-    query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="back_main"))
+    # edit or send
+    try:
+        await query.message.edit_text(text, reply_markup=kb, parse_mode="Markdown")
+    except:
+        await bot.send_message(query.from_user.id, text, reply_markup=kb, parse_mode="Markdown")
+    await query.answer()
 
-def send_cases_list(query, page=0, per_page=8):
-    # show paginated list of cases
-    start = page*per_page
+async def send_cases_list(query, page=0, per_page=8):
+    start = page * per_page
     items = CASES[start:start+per_page]
-    keyboard = []
+    kb = InlineKeyboardMarkup(row_width=1)
     for c in items:
-        keyboard.append([InlineKeyboardButton(f"{c['id']}. {c['title']}", callback_data=f"case_{c['id']}")])
+        kb.add(InlineKeyboardButton(f"{c['id']}. {c['title']}", callback_data=f"case_{c['id']}"))
     nav = []
     if start > 0:
         nav.append(InlineKeyboardButton("⬅️ السابق", callback_data=f"cases_page_{page-1}"))
-    if start+per_page < len(CASES):
+    if start + per_page < len(CASES):
         nav.append(InlineKeyboardButton("التالي ➡️", callback_data=f"cases_page_{page+1}"))
     nav.append(InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="back_main"))
-    keyboard.append(nav)
-    query.edit_message_text("اختر الحالة من القائمة:", reply_markup=InlineKeyboardMarkup(keyboard))
-
-def send_case_detail(query, case_id):
-    case = next((c for c in CASES if c["id"]==case_id), None)
-    if not case:
-        query.answer("Case not found", show_alert=True)
-        return
-    caption = f"*{case['title']}*\n\n{case['short_description']}"
-    keyboard = [
-        [InlineKeyboardButton("📝 اختبار لهذه الحالة", callback_data=f"quiz_case_{case_id}")],
-        [InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="menu_cases")]
-    ]
-    # send photo - edit_message_text can't include photo, so send a new message
+    kb.row(*nav)
     try:
-        query.message.reply_photo(photo=open(os.path.join(os.path.dirname(__file__), case["image"]), "rb"), caption=caption, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard))
-        # optionally delete previous menu message
+        await query.message.edit_text("اختر الحالة من القائمة:", reply_markup=kb)
+    except:
+        await bot.send_message(query.from_user.id, "اختر الحالة من القائمة:", reply_markup=kb)
+    await query.answer()
+
+async def send_case_detail(query, case_id):
+    case = next((c for c in CASES if c["id"] == case_id), None)
+    if not case:
+        await query.answer("الحالة غير موجودة", show_alert=True)
+        return
+    caption = f"*{case['title']}*\n\n{case.get('short_description','')}"
+    kb = InlineKeyboardMarkup(row_width=1)
+    kb.add(InlineKeyboardButton("📝 اختبار لهذه الحالة", callback_data=f"quiz_case_{case_id}"))
+    kb.add(InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="menu_cases"))
+    image_path = BASE_DIR / case["image"]
+    try:
+        # send photo as a new message (edit text can't include a photo)
+        await bot.send_photo(chat_id=query.from_user.id, photo=open(image_path, "rb"), caption=caption, parse_mode="Markdown", reply_markup=kb)
         try:
-            query.message.delete()
+            await query.message.delete()
         except:
             pass
     except Exception as e:
         logger.exception("Failed to send image: %s", e)
-        query.edit_message_text(caption, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
-
-def send_quiz_menu(query):
-    keyboard = [
-        [InlineKeyboardButton("اختبار عشوائي", callback_data="quiz_random")],
-        [InlineKeyboardButton("اختبار حسب رقم الحالة", callback_data="quiz_by_number")],
-        [InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="back_main")],
-    ]
-    query.edit_message_text("اختر نوع الاختبار:", reply_markup=InlineKeyboardMarkup(keyboard))
-
-def send_quiz_for_case(query, case_id):
-    case = next((c for c in CASES if c["id"]==case_id), None)
-    if not case:
-        query.answer("Case not found", show_alert=True)
-        return
-    q = case["quiz"]
-    keyboard = []
-    for idx, opt in enumerate(q["options"]):
-        keyboard.append([InlineKeyboardButton(opt, callback_data=f"answer_{case_id}_{idx}")])
-    keyboard.append([InlineKeyboardButton("⬅️ رجوع للحالة", callback_data=f"case_{case_id}")])
-    # send image + question
-    try:
-        query.message.reply_photo(photo=open(os.path.join(os.path.dirname(__file__), case["image"]), "rb"),
-                                  caption=f"*سؤال للاختبار:*\n{q['question']}", parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard))
+        # fallback: send text only
         try:
-            query.message.delete()
+            await query.message.edit_text(caption, reply_markup=kb, parse_mode="Markdown")
+        except:
+            await bot.send_message(query.from_user.id, caption, reply_markup=kb, parse_mode="Markdown")
+    await query.answer()
+
+async def send_quiz_menu(query):
+    kb = InlineKeyboardMarkup(row_width=1)
+    kb.add(InlineKeyboardButton("اختبار عشوائي", callback_data="quiz_random"))
+    kb.add(InlineKeyboardButton("اختبار حسب رقم الحالة", callback_data="quiz_by_number"))
+    kb.add(InlineKeyboardButton("⬅️ رجوع للقائمة", callback_data="back_main"))
+    try:
+        await query.message.edit_text("اختر نوع الاختبار:", reply_markup=kb)
+    except:
+        await bot.send_message(query.from_user.id, "اختر نوع الاختبار:", reply_markup=kb)
+    await query.answer()
+
+async def send_quiz_for_case(query, case_id):
+    case = next((c for c in CASES if c["id"] == case_id), None)
+    if not case:
+        await query.answer("الحالة غير موجودة", show_alert=True)
+        return
+    q = case.get("quiz", {})
+    # build options keyboard
+    kb = InlineKeyboardMarkup(row_width=1)
+    for idx, opt in enumerate(q.get("options", [])):
+        kb.add(InlineKeyboardButton(opt, callback_data=f"answer_{case_id}_{idx}"))
+    kb.add(InlineKeyboardButton("⬅️ رجوع للحالة", callback_data=f"case_{case_id}"))
+    image_path = BASE_DIR / case["image"]
+    try:
+        await bot.send_photo(chat_id=query.from_user.id, photo=open(image_path, "rb"),
+                             caption=f"*سؤال للاختبار:*\n{q.get('question','سؤال')}",
+                             parse_mode="Markdown", reply_markup=kb)
+        try:
+            await query.message.delete()
         except:
             pass
     except Exception as e:
         logger.exception("failed send quiz image: %s", e)
-        query.edit_message_text(f"{q['question']}", reply_markup=InlineKeyboardMarkup(keyboard))
-
-def handle_answer(update: Update, context: CallbackContext):
-    query = update.callback_query
-    data = query.data
-    query.answer()
-    if data.startswith("answer_"):
-        parts = data.split("_")
-        case_id = int(parts[1]); idx = int(parts[2])
-        case = next((c for c in CASES if c["id"]==case_id), None)
-        correct = case["quiz"]["answer_index"]
-        if idx == correct:
-            query.edit_message_text("✅ صحيح! ممتاز.", parse_mode="Markdown")
-        else:
-            correct_text = case["quiz"]["options"][correct]
-            query.edit_message_text(f"❌ خطأ. الإجابة الصحيحة: *{correct_text}*", parse_mode="Markdown")
-
-def back_main(query):
-    text = "رجعنا للقائمة الرئيسية:"
-    keyboard = [
-        [InlineKeyboardButton("📚 قسم التعليم", callback_data="menu_teach")],
-        [InlineKeyboardButton("🩺 حالات ECG", callback_data="menu_cases")],
-        [InlineKeyboardButton("📝 اختبارات", callback_data="menu_quiz")],
-    ]
-    try:
-        query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
-    except:
-        query.message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
-
-def callback_router(update: Update, context: CallbackContext):
-    query = update.callback_query
-    data = query.data
-    # routing
-    if data.startswith("cases_page_"):
-        page = int(data.split("_")[-1])
-        send_cases_list(query, page=page)
-    elif data.startswith("case_") and data.startswith("case_") and data.count("_")==1:
-        case_id = int(data.split("_")[-1])
-        send_case_detail(query, case_id)
-    elif data == "menu_teach" or data == "menu_cases" or data == "menu_quiz":
-        menu_callback(update, context)
-    elif data == "back_main":
-        back_main(query)
-    elif data.startswith("quiz_case_"):
-        case_id = int(data.split("_")[-1])
-        send_quiz_for_case(query, case_id)
-    elif data == "quiz_random":
-        case = random.choice(CASES)
-        send_quiz_for_case(query, case["id"])
-    elif data.startswith("answer_"):
-        handle_answer(update, context)
-    elif data == "quiz_by_number":
-        # ask user to send a number
-        query.message.reply_text("ارسِل رقم الحالة اللي تبغى تختبرها (مثال: 5)")
         try:
-            query.message.delete()
+            await query.message.edit_text(q.get("question","سؤال"), reply_markup=kb)
         except:
-            pass
+            await bot.send_message(query.from_user.id, q.get("question","سؤال"), reply_markup=kb)
+    await query.answer()
 
-def text_handler(update: Update, context: CallbackContext):
-    txt = update.message.text.strip()
+async def handle_answer(query, case_id, idx):
+    case = next((c for c in CASES if c["id"] == case_id), None)
+    if not case:
+        await query.answer("الحالة غير موجودة", show_alert=True)
+        return
+    correct = case.get("quiz", {}).get("answer_index", 0)
+    if idx == correct:
+        try:
+            await query.message.edit_text("✅ صحيح! ممتاز.")
+        except:
+            await bot.send_message(query.from_user.id, "✅ صحيح! ممتاز.")
+    else:
+        correct_text = case.get("quiz", {}).get("options", [])[correct]
+        try:
+            await query.message.edit_text(f"❌ خطأ. الإجابة الصحيحة: *{correct_text}*", parse_mode="Markdown")
+        except:
+            await bot.send_message(query.from_user.id, f"❌ خطأ. الإجابة الصحيحة: {correct_text}")
+    await query.answer()
+
+async def back_main(query):
+    kb = main_menu_kb()
+    try:
+        await query.message.edit_text("رجعنا للقائمة الرئيسية:", reply_markup=kb)
+    except:
+        await bot.send_message(query.from_user.id, "رجعنا للقائمة الرئيسية:", reply_markup=kb)
+    await query.answer()
+
+# handle plain text (for number input)
+@dp.message_handler()
+async def text_handler(message: types.Message):
+    txt = (message.text or "").strip()
     if txt.isdigit():
         num = int(txt)
         if 1 <= num <= len(CASES):
-            send_quiz_for_case(update, num)
+            # send quiz for that case number
+            # reuse send_quiz_for_case but we need an artificial CallbackQuery-like object:
+            # simpler: directly send quiz content here
+            case = next((c for c in CASES if c["id"] == num), None)
+            if case:
+                q = case.get("quiz", {})
+                kb = InlineKeyboardMarkup(row_width=1)
+                for idx, opt in enumerate(q.get("options", [])):
+                    kb.add(InlineKeyboardButton(opt, callback_data=f"answer_{num}_{idx}"))
+                kb.add(InlineKeyboardButton("⬅️ رجوع للحالة", callback_data=f"case_{num}"))
+                image_path = BASE_DIR / case["image"]
+                try:
+                    await bot.send_photo(chat_id=message.chat.id, photo=open(image_path, "rb"),
+                                         caption=f"*سؤال للاختبار:*\n{q.get('question','سؤال')}",
+                                         parse_mode="Markdown", reply_markup=kb)
+                except Exception:
+                    await message.reply(q.get('question','سؤال'), reply_markup=kb)
         else:
-            update.message.reply_text("رقم غير صالح.")
+            await message.reply("رقم غير صالح. ارسل رقم بين 1 و {}".format(len(CASES)))
     else:
-        update.message.reply_text("اكتب /start للرجوع للقائمة أو اختر زر من الواجهة.")
-
-def main():
-    updater = Updater(BOT_TOKEN, use_context=True)
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CallbackQueryHandler(callback_router))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, text_handler))
-    updater.start_polling()
-    logger.info("Bot started")
-    updater.idle()
+        await message.reply("اكتب /start للرجوع للقائمة أو اختر زر من الواجهة.")
 
 if __name__ == "__main__":
-    main()
+    executor.start_polling(dp, skip_updates=True)
